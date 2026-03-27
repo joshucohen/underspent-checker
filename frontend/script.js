@@ -8,7 +8,7 @@ async function upload() {
     formData.append("threshold", threshold);
     formData.append("include_revenue", includeRevenue);
   
-    const res = await fetch("http://127.0.0.1:8000/analyze", {
+    const res = await fetch("https://underspent-checker.onrender.com/analyze", {
       method: "POST",
       body: formData
     });

@@ -1,19 +1,85 @@
-<h2>Underspent Fund Checker</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Underspent Fund Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
 
-<input type="file" id="fileInput"><br><br>
+<body>
 
-<label>Threshold (%):</label>
-<input type="number" id="threshold" value="50"><br><br>
+  <!-- HEADER -->
+  <header>
+    <h1>Underspent Fund Checker</h1>
+    <p>Quickly identify underutilized funds across multiple years</p>
+  </header>
 
-<label>
-  <input type="checkbox" id="includeRevenue">
-  Include Revenue
-</label><br><br>
+  <hr>
 
-<button onclick="upload()">Analyze</button>
+  <!-- INTRO -->
+  <section>
+    <h2>How it works</h2>
+    <p>
+      Upload a 3-year Excel dataset to identify funds that are not being fully utilized.
+      The tool calculates average spending relative to available balance and flags funds
+      below your selected threshold.
+    </p>
+  </section>
 
-<pre id="output"></pre>
+  <hr>
 
-<button onclick="copyResults()">Copy Results</button>
+  <!-- CONTROLS -->
+  <section>
+    <h2>Analyze Your Data</h2>
 
-<script src="script.js"></script>
+    <label>Upload Excel File:</label><br>
+    <input type="file" id="fileInput"><br><br>
+
+    <label>Threshold (%):</label><br>
+    <input type="number" id="threshold" value="50"><br><br>
+
+    <label>
+      <input type="checkbox" id="includeRevenue">
+      Include Revenue in Calculation
+    </label><br><br>
+
+    <button onclick="upload()">Analyze</button>
+    <button onclick="downloadTemplate()">Download Template</button>
+  </section>
+
+  <hr>
+
+  <!-- HELP -->
+  <section>
+    <h2>Definitions</h2>
+    <ul>
+      <li><strong>Threshold (%):</strong> Maximum % of funds spent before flagged as underspent</li>
+      <li><strong>Include Revenue:</strong> Adds incoming funds to available balance</li>
+      <li><strong>Underspent:</strong> Spending rate below selected threshold</li>
+      <li><strong>Requirements:</strong> 3 years of data, positive balances only</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- RESULTS -->
+  <section>
+    <h2>Results</h2>
+    <div id="output">No results yet.</div><br>
+    <button onclick="copyResults()">Copy Results</button>
+  </section>
+
+  <hr>
+
+  <!-- FOOTER -->
+  <footer>
+    <p style="font-size: 12px; color: gray;">
+      Built for simple financial efficiency analysis
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
