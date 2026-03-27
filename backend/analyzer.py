@@ -2,7 +2,7 @@ import pandas as pd
 
 def analyze_funds(file, threshold=0.0, include_revenue=False):
     # Load single sheet
-    df = pd.read_excel(file)
+    df = file
 
     # Required columns
     required_cols = {"fund_id", "year", "balance", "spend", "revenue"}

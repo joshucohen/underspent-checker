@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import io
@@ -22,21 +22,41 @@ def root():
 @app.post("/analyze")
 async def analyze(
     file: UploadFile = File(...),
-    threshold: float = Form(...),   # user sends percentage (e.g., 50)
+    threshold: float = Form(...),
     include_revenue: bool = Form(False)
 ):
-    contents = await file.read()
+    try:
+        contents = await file.read()
+        filename = file.filename.lower()
 
-    # Convert Excel file
-    excel_file = io.BytesIO(contents)
+        # ✅ Handle file type
+        if filename.endswith(".xlsx"):
+            data_file = io.BytesIO(contents)
+            df = pd.read_excel(data_file)
 
-    # Convert percentage → decimal
-    threshold_decimal = threshold / 100
+        elif filename.endswith(".csv"):
+            data_file = io.StringIO(contents.decode("utf-8"))
+            df = pd.read_csv(data_file)
 
-    result = analyze_funds(
-        excel_file,
-        threshold=threshold_decimal,
-        include_revenue=include_revenue
-    )
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Unsupported file type. Please upload .csv or .xlsx"
+            )
 
-    return result
+        # Convert percentage → decimal
+        threshold_decimal = threshold / 100
+
+        result = analyze_funds(
+            df,
+            threshold=threshold_decimal,
+            include_revenue=include_revenue
+        )
+
+        return result
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )

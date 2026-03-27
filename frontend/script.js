@@ -1,4 +1,7 @@
 async function upload() {
+    const output = document.getElementById("output");
+    const button = document.querySelector("button[onclick='upload()']");
+  
     try {
       const file = document.getElementById("fileInput").files[0];
       const threshold = document.getElementById("threshold").value;
@@ -8,6 +11,14 @@ async function upload() {
         alert("Please upload a file first.");
         return;
       }
+  
+      // ✅ Loading state
+      output.innerHTML = `
+        <div style="padding:16px; color:#555;">
+          Analyzing...
+        </div>
+      `;
+      button.disabled = true;
   
       const formData = new FormData();
       formData.append("file", file);
@@ -19,12 +30,18 @@ async function upload() {
         body: formData
       });
   
+      const text = await res.text();
+  
       if (!res.ok) {
-        throw new Error("Server error");
+        throw new Error(text || "Server error");
       }
   
-      const data = await res.json();
-      const output = document.getElementById("output");
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response from server");
+      }
   
       if (!data || data.length === 0) {
         output.innerHTML = `
@@ -57,7 +74,11 @@ async function upload() {
       `;
   
       data.forEach(fund => {
-        const isLow = fund.spend_rate < 0.05;
+        const spendRate = Number(fund.spend_rate) || 0;
+        const avgBalance = Number(fund.avg_balance) || 0;
+        const avgSpend = Number(fund.avg_spend) || 0;
+  
+        const isLow = spendRate < 0.05;
   
         table += `
           <tr style="border-bottom:1px solid #eee;">
@@ -67,10 +88,10 @@ async function upload() {
               font-weight:${isLow ? '600' : '400'};
               color:${isLow ? '#d32f2f' : '#333'};
             ">
-              ${(fund.spend_rate * 100).toFixed(2)}%
+              ${(spendRate * 100).toFixed(2)}%
             </td>
-            <td style="padding:14px;">${fund.avg_balance.toFixed(2)}</td>
-            <td style="padding:14px;">${fund.avg_spend.toFixed(2)}</td>
+            <td style="padding:14px;">${avgBalance.toFixed(2)}</td>
+            <td style="padding:14px;">${avgSpend.toFixed(2)}</td>
           </tr>
         `;
       });
@@ -86,9 +107,12 @@ async function upload() {
       console.error(err);
       document.getElementById("output").innerHTML = `
         <div style="padding:16px; color:red;">
-          Something went wrong. Please try again.
+          ${err.message || "Something went wrong. Please try again."}
         </div>
       `;
+    } finally {
+      const button = document.querySelector("button[onclick='upload()']");
+      if (button) button.disabled = false;
     }
   }
   
@@ -114,13 +138,16 @@ async function upload() {
     alert("Copied as table (paste into Excel)");
   }
   
-  // ✅ NEW: Download Template Function
+  // ✅ Template aligned with backend (single sheet + year column)
   function downloadTemplate() {
-    const headers = [
-      ["fund_id", "year", "balance", "spend", "revenue"]
+    const rows = [
+      ["fund_id", "year", "balance", "spend", "revenue"],
+      ["A", "2021", "100000", "2000", "5000"],
+      ["A", "2022", "110000", "2500", "6000"],
+      ["A", "2023", "120000", "3000", "7000"]
     ];
   
-    let csvContent = headers.map(e => e.join(",")).join("\n");
+    let csvContent = rows.map(e => e.join(",")).join("\n");
   
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   
