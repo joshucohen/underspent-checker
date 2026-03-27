@@ -1,0 +1,19 @@
+<h2>Underspent Fund Checker</h2>
+
+<input type="file" id="fileInput"><br><br>
+
+<label>Threshold (%):</label>
+<input type="number" id="threshold" value="50"><br><br>
+
+<label>
+  <input type="checkbox" id="includeRevenue">
+  Include Revenue
+</label><br><br>
+
+<button onclick="upload()">Analyze</button>
+
+<pre id="output"></pre>
+
+<button onclick="copyResults()">Copy Results</button>
+
+<script src="script.js"></script>
