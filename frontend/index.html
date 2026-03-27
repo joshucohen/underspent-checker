@@ -21,7 +21,7 @@
   <section>
     <h2>How it works</h2>
     <p>
-      Upload a 3-year Excel dataset to identify funds that are not being fully utilized.
+      Upload a 3-year dataset to identify funds that are not being fully utilized.
       The tool calculates average spending relative to available balance and flags funds
       below your selected threshold.
     </p>
@@ -33,8 +33,8 @@
   <section>
     <h2>Analyze Your Data</h2>
 
-    <label>Upload Excel File:</label><br>
-    <input type="file" id="fileInput"><br><br>
+    <label>Upload File (.csv or Excel):</label><br>
+    <input type="file" id="fileInput" accept=".csv,.xlsx"><br><br>
 
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50"><br><br>
@@ -46,6 +46,7 @@
 
     <button onclick="upload()">Analyze</button>
     <button onclick="downloadTemplate()">Download Template</button>
+
   </section>
 
   <hr>
@@ -57,7 +58,7 @@
       <li><strong>Threshold (%):</strong> Maximum % of funds spent before flagged as underspent</li>
       <li><strong>Include Revenue:</strong> Adds incoming funds to available balance</li>
       <li><strong>Underspent:</strong> Spending rate below selected threshold</li>
-      <li><strong>Requirements:</strong> 3 years of data, positive balances only</li>
+      <li><strong>Requirements:</strong> 3 years of data, consistent format</li>
     </ul>
   </section>
 

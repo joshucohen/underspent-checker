@@ -113,3 +113,19 @@ async function upload() {
     navigator.clipboard.writeText(text);
     alert("Copied as table (paste into Excel)");
   }
+  
+  // ✅ NEW: Download Template Function
+  function downloadTemplate() {
+    const headers = [
+      ["fund_id", "year", "balance", "spend", "revenue"]
+    ];
+  
+    let csvContent = headers.map(e => e.join(",")).join("\n");
+  
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "underspent_template.csv";
+    link.click();
+  }
