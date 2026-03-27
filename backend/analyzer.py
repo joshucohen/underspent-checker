@@ -1,69 +1,55 @@
 import pandas as pd
 
 def analyze_funds(file, threshold=0.0, include_revenue=False):
-    # Load Excel file
-    xls = pd.ExcelFile(file)
+    # Load single sheet
+    df = pd.read_excel(file)
 
-    # Validate number of sheets
-    if len(xls.sheet_names) != 3:
-        raise ValueError("File must contain exactly 3 sheets (one per year)")
+    # Required columns
+    required_cols = {"fund_id", "year", "balance", "spend", "revenue"}
+    if not required_cols.issubset(df.columns):
+        raise ValueError(f"File must contain columns: {required_cols}")
 
-    dfs = []
+    # Ensure numeric fields
+    df["balance"] = pd.to_numeric(df["balance"], errors="coerce")
+    df["spend"] = pd.to_numeric(df["spend"], errors="coerce")
+    df["revenue"] = pd.to_numeric(df["revenue"], errors="coerce")
 
-    # Read and validate each sheet
-    for sheet in xls.sheet_names:
-        df = pd.read_excel(xls, sheet_name=sheet)
+    # Drop invalid rows
+    df = df.dropna(subset=["fund_id", "year", "balance", "spend"])
 
-        required_cols = {"fund_id", "balance", "spend", "revenue"}
-        if not required_cols.issubset(df.columns):
-            raise ValueError(f"Sheet '{sheet}' is missing required columns: {required_cols}")
+    # Ensure exactly 3 years per fund
+    counts = df.groupby("fund_id")["year"].nunique()
+    valid_funds = counts[counts == 3].index
+    df = df[df["fund_id"].isin(valid_funds)]
 
-        dfs.append(df)
+    # Exclude funds with non-positive balance in any year
+    valid_balance = df.groupby("fund_id")["balance"].min() > 0
+    valid_balance_funds = valid_balance[valid_balance].index
+    df = df[df["fund_id"].isin(valid_balance_funds)]
 
-    # Merge all 3 years on fund_id
-    merged = dfs[0]
-    merged = merged.merge(dfs[1], on="fund_id", suffixes=("_y1", "_y2"))
-    merged = merged.merge(dfs[2], on="fund_id")
-
-    # Rename columns for clarity
-    merged = merged.rename(columns={
-        "balance": "balance_y3",
-        "spend": "spend_y3",
-        "revenue": "revenue_y3"
-    })
-
-    # Drop funds not present in all 3 years (inner merge already handles this)
-
-    # Exclude invalid funds (balance <= 0 in ANY year)
-    valid_mask = (
-        (merged["balance_y1"] > 0) &
-        (merged["balance_y2"] > 0) &
-        (merged["balance_y3"] > 0)
-    )
-
-    merged = merged[valid_mask]
-
-    # Calculate averages
-    merged["avg_balance"] = merged[["balance_y1", "balance_y2", "balance_y3"]].mean(axis=1)
-    merged["avg_spend"] = merged[["spend_y1", "spend_y2", "spend_y3"]].mean(axis=1)
-    merged["avg_revenue"] = merged[["revenue_y1", "revenue_y2", "revenue_y3"]].mean(axis=1)
+    # Aggregate
+    grouped = df.groupby("fund_id").agg(
+        avg_balance=("balance", "mean"),
+        avg_spend=("spend", "mean"),
+        avg_revenue=("revenue", "mean")
+    ).reset_index()
 
     # Define available funds
     if include_revenue:
-        merged["available"] = merged["avg_balance"] + merged["avg_revenue"]
+        grouped["available"] = grouped["avg_balance"] + grouped["avg_revenue"]
     else:
-        merged["available"] = merged["avg_balance"]
+        grouped["available"] = grouped["avg_balance"]
 
     # Avoid division issues
-    merged = merged[merged["available"] > 0]
+    grouped = grouped[grouped["available"] > 0]
 
     # Calculate spend rate
-    merged["spend_rate"] = merged["avg_spend"] / merged["available"]
+    grouped["spend_rate"] = grouped["avg_spend"] / grouped["available"]
 
     # Filter underspent funds
-    underspent = merged[merged["spend_rate"] <= threshold]
+    underspent = grouped[grouped["spend_rate"] <= threshold]
 
-    # Return only needed fields
+    # Return required fields
     result = underspent[[
         "fund_id",
         "spend_rate",
