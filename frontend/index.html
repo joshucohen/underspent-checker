@@ -69,20 +69,40 @@
   <section>
     <h2>Analyze Your Data</h2>
 
+    <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
-    <input type="file" id="fileInput" accept=".xlsx"><br><br>
+    <input type="file" id="fileInput" accept=".xlsx"><br>
+    <p class="helper-text">
+      Upload the completed template with all three sheets (Year1, Year2, Year3).
+    </p>
+    <br>
 
+    <!-- THRESHOLD -->
     <label>Threshold (%):</label><br>
-    <input type="number" id="threshold" value="50" min="0" max="100"><br><br>
+    <input type="number" id="threshold" value="50" min="0" max="100"><br>
+    <p class="helper-text">
+      Enter the threshold as a whole number percentage (e.g., 50 = 50%).<br>
+      Funds with a spend rate below this percentage will be flagged as underspent.<br>
+      <strong>Example:</strong> If set to 50%, any fund spending less than half of its available balance will be flagged.
+    </p>
+    <br>
 
+    <!-- REVENUE -->
     <label>
       <input type="checkbox" id="includeRevenue">
       Include Revenue in Calculation
-    </label><br><br>
+    </label><br>
+    <p class="helper-text">
+      When selected, revenue is added to the available balance when calculating spend rate.<br>
+      <strong>Use this if:</strong> your funds receive ongoing contributions or inflows.<br>
+      <strong>Do not use this if:</strong> you want to evaluate spending strictly against existing balances.
+    </p>
+    <br>
 
+    <!-- ACTION -->
     <button id="analyzeBtn" onclick="upload()">Analyze</button>
 
-    <p style="font-size: 12px; color: gray; margin-top:10px;">
+    <p class="helper-text" style="margin-top:10px;">
       Required format: 3 sheets named <strong>Year1, Year2, Year3</strong><br>
       Columns in each sheet: fund_id, balance, spend, revenue
     </p>
@@ -94,8 +114,20 @@
   <!-- RESULTS -->
   <section>
     <h2>Results</h2>
+
+    <p class="helper-text">
+      Results show funds that fall below your selected spend threshold.<br>
+      These funds may require review, depending on institutional policy and intent.
+    </p>
+
     <div id="output">No results yet.</div><br>
+
     <button onclick="copyResults()">Copy Results</button>
+
+    <p class="helper-text" style="margin-top:10px;">
+      Spend Rate = Average Spend ÷ Available Balance.<br>
+      Lower values may indicate funds that are not being actively utilized.
+    </p>
   </section>
 
   <hr>
@@ -109,7 +141,7 @@
     You will need balances and spending data by year.</p>
 
     <p><strong>What is “Spend Rate”?</strong><br>
-    Spend Rate is calculated as Average Spend divided by Average Balance.
+    Spend Rate is calculated as Average Spend divided by Available Balance.
     It helps indicate how actively a fund is being used over time.</p>
 
     <p><strong>What does “underspent” mean?</strong><br>
