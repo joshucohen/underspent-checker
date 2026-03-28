@@ -11,15 +11,20 @@
 
   <!-- HEADER -->
   <header>
-    <h1>Underspent Fund Checker</h1>
-    <p>Identify funds that may not be spending at a sustainable rate</p>
+    <h1>Find Underspent Funds Before They Become a Problem</h1>
+    <p>Surface hidden balances that aren’t being used — before issues compound</p>
+    <p style="font-size: 14px; opacity: 0.8;">
+      Built for advancement, finance, and fund managers using real multi-year data
+    </p>
   </header>
 
-  <!-- QUICK INTRO + LEARN MORE -->
+  <!-- INTRO -->
   <section>
     <p>
-      Quickly identify funds that may be underutilized using multi-year financial data.
-      Built for higher education and nonprofit professionals responsible for fund oversight.
+      Most institutions lack a clear, consistent way to identify underspent funds.
+    </p>
+    <p>
+      This tool analyzes multi-year financial data to surface where balances are growing faster than spending — so you can act before issues compound.
     </p>
 
     <div class="learn-more-container">
@@ -32,41 +37,40 @@
 
         <h3>What This Tool Does</h3>
         <p>
-          This tool analyzes multi-year balance and spending data to calculate a normalized
-          spend rate across time. It helps identify funds where balances are growing faster
-          than spending, which may indicate underutilization.
+          Analyzes multi-year balance and spending data to calculate a normalized spend rate.
+          Flags funds where balances are accumulating faster than they are being used.
         </p>
 
         <h3>Who This Is For</h3>
         <ul>
-          <li>Advancement and Foundation teams</li>
+          <li>Advancement and foundation teams</li>
           <li>Finance and budget offices</li>
           <li>Department administrators and fund managers</li>
-          <li>Anyone responsible for monitoring fund utilization</li>
         </ul>
 
         <h3>What Type of Funds This Analyzes</h3>
         <ul>
           <li>Funds with recurring balances over time</li>
-          <li>Programs, scholarships, or operational support funds</li>
+          <li>Scholarships, programs, and operational funds</li>
           <li>Funds expected to align with donor intent or institutional priorities</li>
         </ul>
 
         <h3>Why This Was Built</h3>
         <p>
-          Built by a higher education professional working directly with philanthropic funds,
-          this tool simplifies a process that is typically manual, fragmented, and time-consuming.
-          It is designed to quickly surface potential issues so teams can focus on decision-making,
-          not data wrangling.
+          Built from real-world fund oversight work inside higher education.
+        </p>
+        <p>
+          Identifying underspent funds is typically manual, inconsistent, and time-consuming.
+          This tool standardizes that process into a clear, repeatable analysis — so teams can focus on decisions, not spreadsheets.
         </p>
 
       </div>
     </div>
   </section>
 
-  <!-- HOW TO USE -->
+  <!-- STEP 1 -->
   <section>
-    <h2>Step 1: Prepare Your Data</h2>
+    <h2>Step 1: Download & Format Your Data</h2>
 
     <ol>
       <li><strong>Download the template</strong></li>
@@ -80,45 +84,45 @@
       <li>
         <strong>Paste into template</strong>
         <ul>
-          <li>Do not rename sheets</li>
-          <li>Do not change column names</li>
+          <li>Keep sheet names and columns exactly as provided</li>
           <li>Use Year1, Year2, Year3</li>
         </ul>
       </li>
-      <li><strong>Upload file and click Analyze</strong></li>
+      <li><strong>Upload file and analyze</strong></li>
     </ol>
 
     <button onclick="downloadTemplate()">Download Template</button>
   </section>
 
-  <!-- INPUT -->
+  <!-- STEP 2 -->
   <section>
-    <h2>Step 2: Analyze Your Data</h2>
+    <h2>Step 2: Upload & Analyze</h2>
 
     <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
     <input type="file" id="fileInput" accept=".xlsx"><br>
+
     <p class="helper-text">
-      Upload the completed template with sheets: Year1, Year2, Year3.
+      Upload template with sheets: Year1, Year2, Year3.
     </p>
+
+    <p class="helper-text" style="margin-top:6px;">
+      Your file is processed securely and never stored.
+    </p>
+
     <br>
 
     <!-- THRESHOLD -->
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50" min="0" max="100"><br>
+
     <p class="helper-text">
-      Enter as a whole number percentage (e.g., 50 = 50%).<br><br>
-
-      The threshold defines the minimum acceptable spend rate.<br>
-      Spend Rate = Average Spend ÷ Available Balance.<br><br>
-
-      Funds with a spend rate below this percentage will be flagged as potentially underspent.<br><br>
-
-      <strong>Example:</strong> If threshold = 50%, any fund spending less than half of its available balance
-      over time will be flagged.<br><br>
-
-      Lower thresholds are more lenient. Higher thresholds are more aggressive.
+      Defines the minimum acceptable spend rate.<br><br>
+      Spend Rate = Average Spend ÷ Available Balance<br><br>
+      Funds below this threshold are flagged for review.<br><br>
+      Lower = more lenient. Higher = more aggressive.
     </p>
+
     <br>
 
     <!-- REVENUE -->
@@ -126,34 +130,42 @@
       <input type="checkbox" id="includeRevenue">
       Include Revenue in Calculation
     </label><br>
+
     <p class="helper-text">
-      When selected, revenue is added to the available balance when calculating spend rate.<br><br>
+      Adds revenue to available balance when calculating spend rate.<br><br>
 
-      <strong>Use this if:</strong><br>
-      • Funds receive ongoing inflows<br>
-      • You want to evaluate spending relative to total inflows<br><br>
+      <strong>Use if:</strong><br>
+      • Funds have ongoing inflows<br><br>
 
-      <strong>Do not use this if:</strong><br>
-      • You want to evaluate against existing balances only<br>
-      • You are analyzing endowment-style behavior<br><br>
-
-      This setting can materially change results.
+      <strong>Do not use if:</strong><br>
+      • Evaluating existing balances only<br>
+      • Reviewing endowment-style behavior
     </p>
+
     <br>
 
     <!-- ACTION -->
-    <button id="analyzeBtn" onclick="upload()">Analyze</button>
+    <button id="analyzeBtn" onclick="startAnalysis()">Analyze Funds</button>
+
+    <!-- LOADING BAR -->
+    <div id="loadingBar" style="display:none; margin-top:15px;">
+      <div style="width:100%; background:#eee; border-radius:6px;">
+        <div id="progress" style="width:0%; height:8px; background:#2563eb; border-radius:6px;"></div>
+      </div>
+      <p id="loadingText" style="margin-top:6px; font-size:14px; color:#555;">
+        Processing your data...
+      </p>
+    </div>
 
     <p class="helper-text">
-      Analysis typically completes in under 2–3 seconds.
+      Analysis typically completes in 10–30 seconds depending on file size.
     </p>
 
-    <!-- COMMON ERRORS -->
     <p class="helper-text" style="margin-top:10px;">
       <strong>Common issues:</strong><br>
-      • Missing one of the 3 sheets (Year1, Year2, Year3)<br>
-      • Renamed sheets or columns<br>
-      • Blank or non-numeric values in balance/spend
+      • Missing sheets (Year1, Year2, Year3)<br>
+      • Renamed columns<br>
+      • Blank or non-numeric values
     </p>
 
   </section>
@@ -163,26 +175,23 @@
     <h2>Results</h2>
 
     <p class="helper-text">
-      Results display funds that fall below your selected threshold.<br><br>
+      Results highlight funds where spending is not keeping pace with available balances.<br><br>
 
-      These funds may indicate underutilization, meaning balances are accumulating faster than they are being used.<br><br>
+      <strong>These are your highest-priority funds for review.</strong><br><br>
 
-      This does <strong>not</strong> automatically mean a fund is being misused — it is a signal for further review.<br><br>
+      This does not automatically indicate misuse — it signals where further review is needed.
+    </p>
 
-      Consider:
-      • Donor intent and restrictions<br>
-      • Planned future use<br>
-      • Fund lifecycle stage<br>
-      • Institutional policy
+    <p class="helper-text">
+      Next step: Review these funds with stakeholders to determine whether spending should be increased, reallocated, or intentionally preserved.
     </p>
 
     <div id="output">No results yet.</div><br>
 
-    <button onclick="copyResults()">Copy Results</button>
+    <button id="copyBtn" onclick="copyResults()" style="display:none;">Copy Results</button>
 
     <p class="helper-text">
-      Spend Rate = Average Spend ÷ Available Balance.<br>
-      Lower values may indicate funds that are not being actively utilized.
+      Spend Rate = Average Spend ÷ Available Balance.
     </p>
   </section>
 
@@ -191,17 +200,16 @@
     <h2>Frequently Asked Questions</h2>
 
     <p><strong>Where do I get this data?</strong><br>
-    Export fund-level financial data from your CRM, ERP, or financial system.</p>
+    Export fund-level data from your CRM, ERP, or financial system.</p>
 
     <p><strong>What is Spend Rate?</strong><br>
-    Average Spend divided by Available Balance.</p>
+    Average Spend ÷ Available Balance.</p>
 
     <p><strong>What does underspent mean?</strong><br>
-    A fund may not be deploying available resources at an expected rate.</p>
+    Spending is not keeping pace with available resources.</p>
 
     <p><strong>What if my file doesn’t work?</strong><br>
-    Ensure correct sheet names and required columns are used exactly.</p>
-
+    Ensure sheet names and columns match exactly.</p>
   </section>
 
   <!-- DATA PRIVACY -->
@@ -211,14 +219,11 @@
     <p>Your data is never stored, logged, or shared.</p>
 
     <p>
-      Files are processed securely in memory and immediately discarded after analysis.
-      No data is written to disk or retained.
+      Files are processed in memory and discarded immediately after analysis.
+      No data is written to disk.
     </p>
 
-    <p>
-      No data is accessible to the developer or any third party at any time.
-    </p>
-
+    <p>No data is accessible to the developer or third parties.</p>
   </section>
 
   <!-- CONTACT -->
@@ -226,7 +231,7 @@
     <h2>Contact</h2>
 
     <p>
-      Built by a higher education professional focused on fund stewardship and operational efficiency.
+      Built by a higher education fund strategist working directly with philanthropic accounts, donor intent, and institutional spending decisions.
     </p>
 
     <p>
@@ -234,13 +239,12 @@
         Connect on LinkedIn
       </a>
     </p>
-
   </section>
 
   <!-- FOOTER -->
   <footer>
     <p style="font-size: 12px; color: gray;">
-      Built for simple financial efficiency analysis
+      Built for higher education fund stewardship and financial oversight
     </p>
   </footer>
 
@@ -251,12 +255,52 @@
       const arrow = document.getElementById("learnMoreArrow");
 
       content.classList.toggle("open");
+      arrow.innerText = content.classList.contains("open") ? "▲" : "▼";
+    }
 
-      if (content.classList.contains("open")) {
-        arrow.innerText = "▲";
-      } else {
-        arrow.innerText = "▼";
-      }
+    function startAnalysis() {
+      const button = document.getElementById("analyzeBtn");
+      const progressBar = document.getElementById("loadingBar");
+      const progress = document.getElementById("progress");
+      const text = document.getElementById("loadingText");
+
+      button.disabled = true;
+      button.innerText = "Analyzing...";
+      progressBar.style.display = "block";
+
+      let percent = 0;
+
+      const messages = [
+        "Reading Excel file...",
+        "Structuring fund data...",
+        "Calculating spend behavior...",
+        "Flagging potential underutilization..."
+      ];
+
+      let msgIndex = 0;
+
+      const interval = setInterval(() => {
+        percent += Math.random() * 12;
+        if (percent > 90) percent = 90;
+
+        progress.style.width = percent + "%";
+        text.innerText = messages[msgIndex % messages.length];
+        msgIndex++;
+      }, 600);
+
+      upload()
+        .then(() => {
+          progress.style.width = "100%";
+          text.innerText = "Analysis complete";
+        })
+        .catch(() => {
+          text.innerText = "Error occurred";
+        })
+        .finally(() => {
+          clearInterval(interval);
+          button.disabled = false;
+          button.innerText = "Analyze Funds";
+        });
     }
   </script>
 
