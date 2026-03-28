@@ -26,12 +26,8 @@ async function upload() {
         return;
       }
   
-      // 🟡 LOADING STATE
-      output.innerHTML = `
-        <div style="padding:16px; color:#555;">
-          Analyzing your file... please wait.
-        </div>
-      `;
+      // 🟡 LOADING STATE (FIXED - no weird box)
+      output.innerHTML = "Analyzing...";
       button.disabled = true;
   
       const formData = new FormData();
@@ -72,10 +68,12 @@ async function upload() {
       // 🔵 SORT (lowest spend rate first)
       data.sort((a, b) => a.spend_rate - b.spend_rate);
   
-      // 🟢 TABLE BUILD
+      // 🟢 TABLE BUILD (FIXED WIDTH BEHAVIOR)
       let table = `
         <table style="
           width:100%;
+          max-width:100%;
+          table-layout: fixed;
           border-collapse: collapse;
           margin-top: 20px;
           font-size: 16px;
@@ -85,10 +83,10 @@ async function upload() {
         ">
           <thead>
             <tr style="background-color:#f4f6f8; border-bottom:2px solid #ddd;">
-              <th style="padding:14px; text-align:left;">Fund ID</th>
-              <th style="padding:14px; text-align:left;">Spend Rate</th>
-              <th style="padding:14px; text-align:left;">Avg Balance</th>
-              <th style="padding:14px; text-align:left;">Avg Spend</th>
+              <th style="padding:14px; text-align:left; word-break:break-word;">Fund ID</th>
+              <th style="padding:14px; text-align:left; word-break:break-word;">Spend Rate</th>
+              <th style="padding:14px; text-align:left; word-break:break-word;">Avg Balance</th>
+              <th style="padding:14px; text-align:left; word-break:break-word;">Avg Spend</th>
             </tr>
           </thead>
           <tbody>
@@ -103,16 +101,17 @@ async function upload() {
   
         table += `
           <tr style="border-bottom:1px solid #eee;">
-            <td style="padding:14px;">${fund.fund_id}</td>
+            <td style="padding:14px; word-break:break-word;">${fund.fund_id}</td>
             <td style="
               padding:14px;
+              word-break:break-word;
               font-weight:${isLow ? '600' : '400'};
               color:${isLow ? '#d32f2f' : '#333'};
             ">
               ${(spendRate * 100).toFixed(2)}%
             </td>
-            <td style="padding:14px;">${avgBalance.toFixed(2)}</td>
-            <td style="padding:14px;">${avgSpend.toFixed(2)}</td>
+            <td style="padding:14px; word-break:break-word;">${avgBalance.toFixed(2)}</td>
+            <td style="padding:14px; word-break:break-word;">${avgSpend.toFixed(2)}</td>
           </tr>
         `;
       });
@@ -124,7 +123,7 @@ async function upload() {
   
       output.innerHTML = table;
   
-      // ✅ AUTO SCROLL
+      // ✅ AUTO SCROLL (FIXED RELIABILITY)
       scrollToResults();
   
     } catch (err) {
@@ -135,11 +134,13 @@ async function upload() {
     }
   }
   
-  // 🔽 SCROLL HELPER
+  // 🔽 SCROLL HELPER (FIXED TIMING)
   function scrollToResults() {
     const section = document.getElementById("resultsSection");
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
     }
   }
   
@@ -159,7 +160,7 @@ async function upload() {
     `;
   }
   
-  // 📋 COPY RESULTS (FIXED FOR EXCEL)
+  // 📋 COPY RESULTS (EXCEL-FRIENDLY)
   function copyResults() {
     const table = document.querySelector("#output table");
   
