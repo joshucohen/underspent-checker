@@ -12,24 +12,60 @@
   <!-- HEADER -->
   <header>
     <h1>Underspent Fund Checker</h1>
-    <p>Quickly identify underutilized funds across multiple years</p>
+    <p>Identify funds that may not be spending at a sustainable rate</p>
   </header>
 
   <hr>
 
-  <!-- INTRO -->
+  <!-- OVERVIEW -->
   <section>
-    <h2>How it works</h2>
+    <h2>What This Tool Does</h2>
     <p>
-      Upload an Excel file with <strong>3 sheets (Year1, Year2, Year3)</strong>.
-      Each sheet should contain fund data for one year. The tool calculates average spending
-      relative to available balance and flags funds below your selected threshold.
+      This tool helps you identify funds that may be underutilized over time.
+      By analyzing multiple years of fund balance and spending data, it calculates
+      average balances, average spending, and a spend rate to highlight funds that
+      may require review or action.
+    </p>
+
+    <p>
+      This is particularly useful for financial oversight, stewardship, and identifying
+      areas where funds may be accumulating faster than they are being used.
     </p>
   </section>
 
   <hr>
 
-  <!-- CONTROLS -->
+  <!-- HOW TO USE -->
+  <section>
+    <h2>How to Use</h2>
+
+    <ol>
+      <li><strong>Download the template</strong> using the button below</li>
+      <li>
+        <strong>Export your data</strong> from your system of record (CRM, ERP, or finance system)
+        <ul>
+          <li>You need fund-level data by year</li>
+          <li>Each year should include: fund_id, balance, spend, revenue</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Paste your data into the template</strong>
+        <ul>
+          <li>Do not rename sheets</li>
+          <li>Do not change column names</li>
+          <li>Fill all three sheets (Year1, Year2, Year3)</li>
+        </ul>
+      </li>
+      <li><strong>Upload the completed file</strong></li>
+      <li><strong>Click Analyze</strong> to generate results</li>
+    </ol>
+
+    <button onclick="downloadTemplate()">Download Template</button>
+  </section>
+
+  <hr>
+
+  <!-- INPUT -->
   <section>
     <h2>Analyze Your Data</h2>
 
@@ -45,26 +81,12 @@
     </label><br><br>
 
     <button id="analyzeBtn" onclick="upload()">Analyze</button>
-    <button onclick="downloadTemplate()">Download Template</button>
 
     <p style="font-size: 12px; color: gray; margin-top:10px;">
       Required format: 3 sheets named <strong>Year1, Year2, Year3</strong><br>
       Columns in each sheet: fund_id, balance, spend, revenue
     </p>
 
-  </section>
-
-  <hr>
-
-  <!-- HELP -->
-  <section>
-    <h2>Definitions</h2>
-    <ul>
-      <li><strong>Threshold (%):</strong> Maximum % of funds spent before flagged as underspent</li>
-      <li><strong>Include Revenue:</strong> Adds incoming funds to available balance</li>
-      <li><strong>Underspent:</strong> Spending rate below selected threshold</li>
-      <li><strong>Requirements:</strong> Exactly 3 sheets (Year1, Year2, Year3) with consistent structure</li>
-    </ul>
   </section>
 
   <hr>
@@ -78,6 +100,47 @@
 
   <hr>
 
+  <!-- FAQ -->
+  <section>
+    <h2>Frequently Asked Questions</h2>
+
+    <p><strong>Where do I get this data?</strong><br>
+    Export fund-level financial data from your system of record (such as your CRM, ERP, or financial system).
+    You will need balances and spending data by year.</p>
+
+    <p><strong>What is “Spend Rate”?</strong><br>
+    Spend Rate is calculated as Average Spend divided by Average Balance.
+    It helps indicate how actively a fund is being used over time.</p>
+
+    <p><strong>What does “underspent” mean?</strong><br>
+    Funds with low spend rates may indicate that balances are accumulating faster than they are being used.
+    This may require further review depending on institutional policy.</p>
+
+    <p><strong>What if my file doesn’t work?</strong><br>
+    Ensure you are using the provided template exactly as structured:
+    correct sheet names, correct columns, and data in all three sheets.</p>
+
+  </section>
+
+  <hr>
+
+  <!-- DATA PRIVACY -->
+  <section>
+    <h2>Data Privacy</h2>
+
+    <p>
+      Your data is not stored, logged, or shared.
+    </p>
+
+    <p>
+      All uploaded files are processed temporarily in memory and are immediately discarded after analysis.
+      No data is accessible to developers or any third parties.
+    </p>
+
+  </section>
+
+  <hr>
+
   <!-- FOOTER -->
   <footer>
     <p style="font-size: 12px; color: gray;">
@@ -85,7 +148,7 @@
     </p>
   </footer>
 
-  <!-- ✅ REQUIRED for template generation -->
+  <!-- XLSX LIBRARY -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <script src="script.js"></script>

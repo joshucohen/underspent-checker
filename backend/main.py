@@ -25,16 +25,37 @@ async def analyze(
     include_revenue: bool = Form(False)
 ):
     try:
+        # 🔴 Validate file presence
+        if not file or not file.filename:
+            raise HTTPException(
+                status_code=400,
+                detail="No file uploaded. Please upload a valid Excel (.xlsx) file."
+            )
+
         filename = file.filename.lower()
 
-        # ✅ Enforce Excel only
+        # 🔴 Enforce Excel only
         if not filename.endswith(".xlsx"):
             raise HTTPException(
                 status_code=400,
-                detail="Only Excel (.xlsx) files are supported. File must contain 3 sheets (one per year)."
+                detail="Invalid file type. Only Excel (.xlsx) files are supported."
+            )
+
+        # 🔴 Validate threshold
+        if threshold < 0 or threshold > 100:
+            raise HTTPException(
+                status_code=400,
+                detail="Threshold must be between 0 and 100."
             )
 
         contents = await file.read()
+
+        if not contents:
+            raise HTTPException(
+                status_code=400,
+                detail="Uploaded file is empty."
+            )
+
         excel_file = io.BytesIO(contents)
 
         # Convert percentage → decimal
@@ -48,8 +69,20 @@ async def analyze(
 
         return result
 
-    except Exception as e:
+    except HTTPException:
+        # 🔁 Pass through clean errors
+        raise
+
+    except ValueError as e:
+        # 🔴 Expected validation errors from analyzer
         raise HTTPException(
             status_code=400,
             detail=str(e)
+        )
+
+    except Exception:
+        # 🔴 Catch-all (don’t expose internals)
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred. Please check your file format and try again."
         )

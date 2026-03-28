@@ -1,27 +1,35 @@
 async function upload() {
     const output = document.getElementById("output");
-    const button = document.querySelector("button[onclick='upload()']");
+    const button = document.querySelector("#analyzeBtn");
   
     try {
-      const file = document.getElementById("fileInput").files[0];
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
       const threshold = document.getElementById("threshold").value;
       const includeRevenue = document.getElementById("includeRevenue").checked;
   
+      // 🔴 VALIDATION: No file
       if (!file) {
-        alert("Please upload an Excel (.xlsx) file.");
+        showError("Please upload an Excel (.xlsx) file before analyzing.");
         return;
       }
   
-      // ✅ Enforce Excel only (frontend validation)
+      // 🔴 VALIDATION: File type
       if (!file.name.toLowerCase().endsWith(".xlsx")) {
-        alert("Only Excel (.xlsx) files are supported. File must contain 3 sheets: Year1, Year2, Year3.");
+        showError("Invalid file type. Please upload a valid Excel (.xlsx) file.");
         return;
       }
   
-      // ✅ Loading state
+      // 🔴 VALIDATION: Threshold sanity
+      if (threshold === "" || threshold < 0 || threshold > 100) {
+        showError("Threshold must be a number between 0 and 100.");
+        return;
+      }
+  
+      // 🟡 LOADING STATE
       output.innerHTML = `
         <div style="padding:16px; color:#555;">
-          Analyzing...
+          Analyzing your file... please wait.
         </div>
       `;
       button.disabled = true;
@@ -39,25 +47,30 @@ async function upload() {
       const text = await res.text();
   
       if (!res.ok) {
-        throw new Error(text || "Server error");
+        throw new Error(text || "Server error occurred.");
       }
   
       let data;
       try {
         data = JSON.parse(text);
       } catch {
-        throw new Error("Invalid response from server");
+        throw new Error("Unexpected response from server. Please try again.");
       }
   
+      // 🟡 NO RESULTS
       if (!data || data.length === 0) {
         output.innerHTML = `
           <div style="padding:16px; color:#555;">
-            No underspent funds found.
+            No underspent funds found based on your selected threshold.
           </div>
         `;
         return;
       }
   
+      // 🔵 SORT (lowest spend rate first)
+      data.sort((a, b) => a.spend_rate - b.spend_rate);
+  
+      // 🟢 TABLE BUILD
       let table = `
         <table style="
           width:100%;
@@ -111,17 +124,29 @@ async function upload() {
   
     } catch (err) {
       console.error(err);
-      document.getElementById("output").innerHTML = `
-        <div style="padding:16px; color:red;">
-          ${err.message || "Something went wrong. Please try again."}
-        </div>
-      `;
+      showError(err.message || "Something went wrong. Please try again.");
     } finally {
-      const button = document.querySelector("button[onclick='upload()']");
       if (button) button.disabled = false;
     }
   }
   
+  // 🔴 CENTRALIZED ERROR HANDLING
+  function showError(message) {
+    const output = document.getElementById("output");
+    output.innerHTML = `
+      <div style="
+        padding:16px;
+        color:#b91c1c;
+        background:#fee2e2;
+        border:1px solid #fecaca;
+        border-radius:8px;
+      ">
+        ${message}
+      </div>
+    `;
+  }
+  
+  // 📋 COPY RESULTS
   function copyResults() {
     const table = document.querySelector("#output table");
   
@@ -144,12 +169,11 @@ async function upload() {
     alert("Copied as table (paste into Excel)");
   }
   
-  // ✅ CORRECT TEMPLATE: 3-sheet Excel (NO DATA, headers only)
+  // 📥 TEMPLATE DOWNLOAD (3 SHEETS, CLEAN)
   function downloadTemplate() {
     const wb = XLSX.utils.book_new();
   
     const headers = [["fund_id", "balance", "spend", "revenue"]];
-  
     const sheets = ["Year1", "Year2", "Year3"];
   
     sheets.forEach(name => {
