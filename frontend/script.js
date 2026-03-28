@@ -8,7 +8,13 @@ async function upload() {
       const includeRevenue = document.getElementById("includeRevenue").checked;
   
       if (!file) {
-        alert("Please upload a file first.");
+        alert("Please upload an Excel (.xlsx) file.");
+        return;
+      }
+  
+      // ✅ Enforce Excel only (frontend validation)
+      if (!file.name.toLowerCase().endsWith(".xlsx")) {
+        alert("Only Excel (.xlsx) files are supported. File must contain 3 sheets: Year1, Year2, Year3.");
         return;
       }
   
@@ -138,21 +144,18 @@ async function upload() {
     alert("Copied as table (paste into Excel)");
   }
   
-  // ✅ Template aligned with backend (single sheet + year column)
+  // ✅ CORRECT TEMPLATE: 3-sheet Excel (NO DATA, headers only)
   function downloadTemplate() {
-    const rows = [
-      ["fund_id", "year", "balance", "spend", "revenue"],
-      ["A", "2021", "100000", "2000", "5000"],
-      ["A", "2022", "110000", "2500", "6000"],
-      ["A", "2023", "120000", "3000", "7000"]
-    ];
+    const wb = XLSX.utils.book_new();
   
-    let csvContent = rows.map(e => e.join(",")).join("\n");
+    const headers = [["fund_id", "balance", "spend", "revenue"]];
   
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const sheets = ["Year1", "Year2", "Year3"];
   
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "underspent_template.csv";
-    link.click();
+    sheets.forEach(name => {
+      const ws = XLSX.utils.aoa_to_sheet(headers);
+      XLSX.utils.book_append_sheet(wb, ws, name);
+    });
+  
+    XLSX.writeFile(wb, "underspent_template.xlsx");
   }

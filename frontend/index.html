@@ -21,9 +21,9 @@
   <section>
     <h2>How it works</h2>
     <p>
-      Upload a dataset with <strong>3 years per fund</strong> (one row per year).
-      The tool calculates average spending relative to available balance and flags funds
-      below your selected threshold.
+      Upload an Excel file with <strong>3 sheets (Year1, Year2, Year3)</strong>.
+      Each sheet should contain fund data for one year. The tool calculates average spending
+      relative to available balance and flags funds below your selected threshold.
     </p>
   </section>
 
@@ -33,8 +33,8 @@
   <section>
     <h2>Analyze Your Data</h2>
 
-    <label>Upload File (.csv or Excel):</label><br>
-    <input type="file" id="fileInput" accept=".csv,.xlsx"><br><br>
+    <label>Upload Excel File (.xlsx only):</label><br>
+    <input type="file" id="fileInput" accept=".xlsx"><br><br>
 
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50" min="0" max="100"><br><br>
@@ -48,7 +48,8 @@
     <button onclick="downloadTemplate()">Download Template</button>
 
     <p style="font-size: 12px; color: gray; margin-top:10px;">
-      Template format: fund_id, year, balance, spend, revenue
+      Required format: 3 sheets named <strong>Year1, Year2, Year3</strong><br>
+      Columns in each sheet: fund_id, balance, spend, revenue
     </p>
 
   </section>
@@ -62,7 +63,7 @@
       <li><strong>Threshold (%):</strong> Maximum % of funds spent before flagged as underspent</li>
       <li><strong>Include Revenue:</strong> Adds incoming funds to available balance</li>
       <li><strong>Underspent:</strong> Spending rate below selected threshold</li>
-      <li><strong>Requirements:</strong> Exactly 3 years per fund, positive balances only</li>
+      <li><strong>Requirements:</strong> Exactly 3 sheets (Year1, Year2, Year3) with consistent structure</li>
     </ul>
   </section>
 
@@ -83,6 +84,9 @@
       Built for simple financial efficiency analysis
     </p>
   </footer>
+
+  <!-- ✅ REQUIRED for template generation -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <script src="script.js"></script>
 
