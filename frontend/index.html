@@ -2,17 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Underspent Fund Checker</title>
+  <title>Underspent Funds Finder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="./favicon.png">
 </head>
 
 <body>
 
   <!-- HEADER -->
   <header>
-    <h1>Find Underspent Funds Before They Become a Problem</h1>
-    <p>Surface hidden balances that aren’t being used — before issues compound</p>
+
+    <!-- LOGO -->
+    <div style="margin-bottom:10px;">
+        <img src="./logo.png" alt="Underspent Funds Finder Logo" style="height:40px;">
+    </div>
+
+    <h1>Underspent Funds Finder</h1>
+
+    <p>
+      Identify funds where spending is not keeping pace with available balances
+    </p>
+
     <p style="font-size: 14px; opacity: 0.8;">
       Built for advancement, finance, and fund managers using real multi-year data
     </p>
@@ -24,7 +37,7 @@
       Most institutions lack a clear, consistent way to identify underspent funds.
     </p>
     <p>
-      This tool analyzes multi-year financial data to surface where balances are growing faster than spending — so you can act before issues compound.
+      This tool analyzes your multi-year transaction data to help identify underspent funds quickly and consistently.
     </p>
 
     <div class="learn-more-container">
@@ -180,7 +193,6 @@
 
     <div id="output">No results yet.</div><br>
 
-    <!-- ✅ UPDATED BUTTONS -->
     <button id="copyBtn" onclick="copyResults()" style="display:none;">
       Copy Full Results
     </button>
