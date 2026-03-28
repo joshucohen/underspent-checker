@@ -13,6 +13,11 @@
   <header>
     <h1>Underspent Fund Checker</h1>
     <p>Identify funds that may not be spending at a sustainable rate</p>
+
+    <!-- NEW: CTA -->
+    <button onclick="document.getElementById('fileInput').scrollIntoView({ behavior: 'smooth' })">
+      Start Analysis
+    </button>
   </header>
 
   <!-- QUICK INTRO + LEARN MORE -->
@@ -24,7 +29,7 @@
 
     <div class="learn-more-container">
       <div class="learn-more-header" onclick="toggleLearnMore()">
-        <span>Learn More</span>
+        <span>Learn More About This Tool</span>
         <span id="learnMoreArrow">▼</span>
       </div>
 
@@ -66,7 +71,7 @@
 
   <!-- HOW TO USE -->
   <section>
-    <h2>How to Use</h2>
+    <h2>Step 1: Prepare Your Data</h2>
 
     <ol>
       <li><strong>Download the template</strong></li>
@@ -93,7 +98,7 @@
 
   <!-- INPUT -->
   <section>
-    <h2>Analyze Your Data</h2>
+    <h2>Step 2: Analyze Your Data</h2>
 
     <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
@@ -117,7 +122,7 @@
       <strong>Example:</strong> If threshold = 50%, any fund spending less than half of its available balance
       over time will be flagged.<br><br>
 
-      Lower thresholds are more lenient. Higher thresholds are more aggressive in identifying underutilization.
+      Lower thresholds are more lenient. Higher thresholds are more aggressive.
     </p>
     <br>
 
@@ -130,19 +135,31 @@
       When selected, revenue is added to the available balance when calculating spend rate.<br><br>
 
       <strong>Use this if:</strong><br>
-      • Funds receive ongoing gifts, transfers, or inflows<br>
-      • You want to evaluate spending relative to total inflows over time<br><br>
+      • Funds receive ongoing inflows<br>
+      • You want to evaluate spending relative to total inflows<br><br>
 
       <strong>Do not use this if:</strong><br>
-      • You want to evaluate spending strictly against existing balances<br>
-      • You are analyzing endowment draw vs. spend behavior<br><br>
+      • You want to evaluate against existing balances only<br>
+      • You are analyzing endowment-style behavior<br><br>
 
-      This setting can materially change results depending on fund structure.
+      This setting can materially change results.
     </p>
     <br>
 
     <!-- ACTION -->
     <button id="analyzeBtn" onclick="upload()">Analyze</button>
+
+    <p class="helper-text">
+      Analysis typically completes in under 2–3 seconds.
+    </p>
+
+    <!-- NEW: COMMON ERRORS -->
+    <p class="helper-text" style="margin-top:10px;">
+      <strong>Common issues:</strong><br>
+      • Missing one of the 3 sheets (Year1, Year2, Year3)<br>
+      • Renamed sheets or columns<br>
+      • Blank or non-numeric values in balance/spend
+    </p>
 
   </section>
 
@@ -157,11 +174,11 @@
 
       This does <strong>not</strong> automatically mean a fund is being misused — it is a signal for further review.<br><br>
 
-      Interpretation should consider:
+      Consider:
       • Donor intent and restrictions<br>
       • Planned future use<br>
-      • Fund maturity and lifecycle stage<br>
-      • Institutional policy or spending norms
+      • Fund lifecycle stage<br>
+      • Institutional policy
     </p>
 
     <div id="output">No results yet.</div><br>
@@ -185,10 +202,10 @@
     Average Spend divided by Available Balance.</p>
 
     <p><strong>What does underspent mean?</strong><br>
-    It indicates that a fund may not be deploying available resources at a rate consistent with expectations.</p>
+    A fund may not be deploying available resources at an expected rate.</p>
 
     <p><strong>What if my file doesn’t work?</strong><br>
-    Ensure you are using the provided template exactly as structured with correct sheet names and columns.</p>
+    Ensure correct sheet names and required columns are used exactly.</p>
 
   </section>
 
@@ -196,17 +213,15 @@
   <section>
     <h2>Data Privacy</h2>
 
+    <p>Your data is never stored, logged, or shared.</p>
+
     <p>
-      Your data is not stored, logged, or shared under any circumstances.
+      Files are processed securely in memory and immediately discarded after analysis.
+      No data is written to disk or retained.
     </p>
 
     <p>
-      All uploaded files are processed temporarily in memory during your session and are immediately discarded after analysis completes.
-      No data is written to disk, persisted, or accessible to the developer or any third parties.
-    </p>
-
-    <p>
-      This tool is designed to operate as a stateless processor — your data exists only for the duration of the calculation.
+      No data is accessible to the developer or any third party at any time.
     </p>
 
   </section>
