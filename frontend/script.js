@@ -64,6 +64,8 @@ async function upload() {
             No underspent funds found based on your selected threshold.
           </div>
         `;
+  
+        scrollToResults();
         return;
       }
   
@@ -122,11 +124,22 @@ async function upload() {
   
       output.innerHTML = table;
   
+      // ✅ AUTO SCROLL
+      scrollToResults();
+  
     } catch (err) {
       console.error(err);
       showError(err.message || "Something went wrong. Please try again.");
     } finally {
       if (button) button.disabled = false;
+    }
+  }
+  
+  // 🔽 SCROLL HELPER
+  function scrollToResults() {
+    const section = document.getElementById("resultsSection");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
   }
   
@@ -146,7 +159,7 @@ async function upload() {
     `;
   }
   
-  // 📋 COPY RESULTS
+  // 📋 COPY RESULTS (FIXED FOR EXCEL)
   function copyResults() {
     const table = document.querySelector("#output table");
   
@@ -160,16 +173,16 @@ async function upload() {
     for (let row of table.rows) {
       let rowData = [];
       for (let cell of row.cells) {
-        rowData.push(cell.innerText);
+        rowData.push(cell.innerText.trim());
       }
       text += rowData.join("\t") + "\n";
     }
   
     navigator.clipboard.writeText(text);
-    alert("Copied as table (paste into Excel)");
+    alert("Copied in Excel-ready format!");
   }
   
-  // 📥 TEMPLATE DOWNLOAD (3 SHEETS, CLEAN)
+  // 📥 TEMPLATE DOWNLOAD
   function downloadTemplate() {
     const wb = XLSX.utils.book_new();
   
