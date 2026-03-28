@@ -15,234 +15,156 @@
     <p>Identify funds that may not be spending at a sustainable rate</p>
   </header>
 
-  <hr>
-
-  <!-- OVERVIEW -->
+  <!-- QUICK INTRO + LEARN MORE -->
   <section>
-    <h2>What This Tool Does</h2>
     <p>
-      This tool helps identify funds that may be underutilized over time by analyzing
-      multi-year balance and spending data. It calculates average balances, average spending,
-      and a spend rate to highlight funds that may require review or action.
+      Quickly identify funds that may be underutilized using multi-year financial data.
+      Built for higher education and nonprofit professionals responsible for fund oversight.
     </p>
 
-    <p>
-      It is designed to support better financial stewardship and help institutions
-      identify areas where funds may be accumulating faster than they are being used.
-    </p>
+    <div class="learn-more-container">
+      <div class="learn-more-header" onclick="toggleLearnMore()">
+        <span>Learn More</span>
+        <span id="learnMoreArrow">▼</span>
+      </div>
+
+      <div id="learnMoreContent" class="learn-more-content">
+
+        <h3>What This Tool Does</h3>
+        <p>
+          This tool analyzes multi-year balance and spending data to calculate a spend rate,
+          helping identify funds that may require review or action.
+        </p>
+
+        <h3>Who This Is For</h3>
+        <ul>
+          <li>Advancement and Foundation teams</li>
+          <li>Finance and budget offices</li>
+          <li>Department administrators and fund managers</li>
+          <li>Anyone responsible for monitoring fund utilization</li>
+        </ul>
+
+        <h3>What Type of Funds This Analyzes</h3>
+        <ul>
+          <li>Funds with recurring balances over time</li>
+          <li>Programs, scholarships, or operational support funds</li>
+          <li>Funds expected to align with donor intent or institutional priorities</li>
+        </ul>
+
+        <h3>Why This Was Built</h3>
+        <p>
+          Built by a higher education professional working directly with philanthropic funds,
+          this tool simplifies a process that is typically manual, fragmented, and time-consuming.
+        </p>
+
+      </div>
+    </div>
   </section>
-
-  <hr>
-
-  <!-- AUDIENCE -->
-  <section>
-    <h2>Who This Is For</h2>
-    <p>
-      This tool is designed for professionals working in higher education and nonprofit environments,
-      including:
-    </p>
-
-    <ul>
-      <li>Advancement and Foundation teams</li>
-      <li>Finance and budget offices</li>
-      <li>Department administrators and fund managers</li>
-      <li>Anyone responsible for monitoring fund utilization</li>
-    </ul>
-
-    <p>
-      No technical experience is required. The tool is built to be simple, intuitive, and accessible.
-    </p>
-  </section>
-
-  <hr>
-
-  <!-- FUND CONTEXT -->
-  <section>
-    <h2>What Type of Funds This Analyzes</h2>
-    <p>
-      This tool is best suited for analyzing philanthropic or institutional funds that:
-    </p>
-
-    <ul>
-      <li>Maintain a recurring balance over time</li>
-      <li>Support ongoing programs, scholarships, or operations</li>
-      <li>Are expected to be used in alignment with donor intent or institutional priorities</li>
-    </ul>
-
-    <p>
-      It is particularly useful for identifying funds that may be accumulating balances
-      without corresponding spending activity.
-    </p>
-  </section>
-
-  <hr>
-
-  <!-- WHY BUILT -->
-  <section>
-    <h2>Why This Was Built</h2>
-    <p>
-      This tool was built by a higher education professional who works directly with
-      philanthropic funds and financial operations on a daily basis.
-    </p>
-
-    <p>
-      Many institutions face a common challenge: understanding whether funds are being used
-      effectively and in alignment with their intended purpose. This often requires manual,
-      time-consuming analysis across multiple systems and datasets.
-    </p>
-
-    <p>
-      This tool was created to simplify that process and make it accessible to anyone,
-      without requiring technical expertise or complex data workflows.
-    </p>
-  </section>
-
-  <hr>
 
   <!-- HOW TO USE -->
   <section>
     <h2>How to Use</h2>
 
     <ol>
-      <li><strong>Download the template</strong> using the button below</li>
+      <li><strong>Download the template</strong></li>
       <li>
-        <strong>Export your data</strong> from your system of record (CRM, ERP, or finance system)
+        <strong>Export your data</strong>
         <ul>
-          <li>You need fund-level data by year</li>
-          <li>Each year should include: fund_id, balance, spend, revenue</li>
+          <li>Fund-level data by year</li>
+          <li>Columns: fund_id, balance, spend, revenue</li>
         </ul>
       </li>
       <li>
-        <strong>Paste your data into the template</strong>
+        <strong>Paste into template</strong>
         <ul>
           <li>Do not rename sheets</li>
           <li>Do not change column names</li>
-          <li>Fill all three sheets (Year1, Year2, Year3)</li>
+          <li>Use Year1, Year2, Year3</li>
         </ul>
       </li>
-      <li><strong>Upload the completed file</strong></li>
-      <li><strong>Click Analyze</strong> to generate results</li>
+      <li><strong>Upload file and click Analyze</strong></li>
     </ol>
 
     <button onclick="downloadTemplate()">Download Template</button>
   </section>
 
-  <hr>
-
   <!-- INPUT -->
   <section>
     <h2>Analyze Your Data</h2>
 
-    <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
     <input type="file" id="fileInput" accept=".xlsx"><br>
     <p class="helper-text">
-      Upload the completed template with all three sheets (Year1, Year2, Year3).
+      Upload the completed template with sheets: Year1, Year2, Year3
     </p>
     <br>
 
-    <!-- THRESHOLD -->
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50" min="0" max="100"><br>
     <p class="helper-text">
-      Enter the threshold as a whole number percentage (e.g., 50 = 50%).<br>
-      Funds with a spend rate below this percentage will be flagged as underspent.<br>
-      <strong>Example:</strong> If set to 50%, any fund spending less than half of its available balance will be flagged.
+      Enter as a whole number (e.g., 50 = 50%).<br>
+      Funds below this spend rate will be flagged.
     </p>
     <br>
 
-    <!-- REVENUE -->
     <label>
       <input type="checkbox" id="includeRevenue">
       Include Revenue in Calculation
     </label><br>
     <p class="helper-text">
-      When selected, revenue is added to the available balance when calculating spend rate.<br>
-      <strong>Use this if:</strong> your funds receive ongoing contributions or inflows.<br>
-      <strong>Do not use this if:</strong> you want to evaluate spending strictly against existing balances.
+      Adds revenue to available balance.<br>
+      Use if funds receive ongoing inflows.
     </p>
     <br>
 
-    <!-- ACTION -->
     <button id="analyzeBtn" onclick="upload()">Analyze</button>
 
-    <p class="helper-text" style="margin-top:10px;">
-      Required format: 3 sheets named <strong>Year1, Year2, Year3</strong><br>
-      Columns in each sheet: fund_id, balance, spend, revenue
-    </p>
-
   </section>
-
-  <hr>
 
   <!-- RESULTS -->
   <section>
     <h2>Results</h2>
 
     <p class="helper-text">
-      Results show funds that fall below your selected spend threshold.<br>
-      These funds may require review, depending on institutional policy and intent.
+      Funds below your threshold may require review.
     </p>
 
     <div id="output">No results yet.</div><br>
 
     <button onclick="copyResults()">Copy Results</button>
 
-    <p class="helper-text" style="margin-top:10px;">
-      Spend Rate = Average Spend ÷ Available Balance.<br>
-      Lower values may indicate funds that are not being actively utilized.
+    <p class="helper-text">
+      Spend Rate = Average Spend ÷ Available Balance
     </p>
   </section>
-
-  <hr>
 
   <!-- FAQ -->
   <section>
     <h2>Frequently Asked Questions</h2>
 
     <p><strong>Where do I get this data?</strong><br>
-    Export fund-level financial data from your system of record (such as your CRM, ERP, or financial system).
-    You will need balances and spending data by year.</p>
+    Export from your CRM, ERP, or financial system.</p>
 
-    <p><strong>What is “Spend Rate”?</strong><br>
-    Spend Rate is calculated as Average Spend divided by Available Balance.</p>
+    <p><strong>What is Spend Rate?</strong><br>
+    Average Spend divided by Available Balance.</p>
 
-    <p><strong>What does “underspent” mean?</strong><br>
-    Funds with low spend rates may indicate underutilization and may require review.</p>
-
-    <p><strong>What if my file doesn’t work?</strong><br>
-    Ensure you are using the provided template exactly as structured.</p>
+    <p><strong>What does underspent mean?</strong><br>
+    Low spend rate relative to balance.</p>
 
   </section>
-
-  <hr>
 
   <!-- DATA PRIVACY -->
   <section>
     <h2>Data Privacy</h2>
-
-    <p>Your data is not stored, logged, or shared.</p>
-
-    <p>
-      All uploaded files are processed temporarily in memory and discarded immediately after analysis.
-      No data is accessible to developers or any third parties.
-    </p>
-
+    <p>Your data is not stored or shared. Files are processed in memory only.</p>
   </section>
-
-  <hr>
 
   <!-- CONTACT -->
   <section>
-    <h2>Contact the Developer</h2>
+    <h2>Contact</h2>
 
     <p>
-      This tool was built by a higher education professional focused on improving
-      financial stewardship and fund utilization.
-    </p>
-
-    <p>
-      If you have questions, feedback, or would like to connect, feel free to reach out:
+      Built by a higher education professional focused on fund stewardship.
     </p>
 
     <p>
@@ -253,8 +175,6 @@
 
   </section>
 
-  <hr>
-
   <!-- FOOTER -->
   <footer>
     <p style="font-size: 12px; color: gray;">
@@ -262,9 +182,23 @@
     </p>
   </footer>
 
-  <!-- XLSX LIBRARY -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <!-- SCRIPT -->
+  <script>
+    function toggleLearnMore() {
+      const content = document.getElementById("learnMoreContent");
+      const arrow = document.getElementById("learnMoreArrow");
 
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        arrow.innerText = "▼";
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        arrow.innerText = "▲";
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="script.js"></script>
 
 </body>
