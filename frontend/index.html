@@ -32,8 +32,9 @@
 
         <h3>What This Tool Does</h3>
         <p>
-          This tool analyzes multi-year balance and spending data to calculate a spend rate,
-          helping identify funds that may require review or action.
+          This tool analyzes multi-year balance and spending data to calculate a normalized
+          spend rate across time. It helps identify funds where balances are growing faster
+          than spending, which may indicate underutilization.
         </p>
 
         <h3>Who This Is For</h3>
@@ -55,6 +56,8 @@
         <p>
           Built by a higher education professional working directly with philanthropic funds,
           this tool simplifies a process that is typically manual, fragmented, and time-consuming.
+          It is designed to quickly surface potential issues so teams can focus on decision-making,
+          not data wrangling.
         </p>
 
       </div>
@@ -92,31 +95,53 @@
   <section>
     <h2>Analyze Your Data</h2>
 
+    <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
     <input type="file" id="fileInput" accept=".xlsx"><br>
     <p class="helper-text">
-      Upload the completed template with sheets: Year1, Year2, Year3
+      Upload the completed template with sheets: Year1, Year2, Year3.
     </p>
     <br>
 
+    <!-- THRESHOLD -->
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50" min="0" max="100"><br>
     <p class="helper-text">
-      Enter as a whole number (e.g., 50 = 50%).<br>
-      Funds below this spend rate will be flagged.
+      Enter as a whole number percentage (e.g., 50 = 50%).<br><br>
+
+      The threshold defines the minimum acceptable spend rate.<br>
+      Spend Rate = Average Spend ÷ Available Balance.<br><br>
+
+      Funds with a spend rate below this percentage will be flagged as potentially underspent.<br><br>
+
+      <strong>Example:</strong> If threshold = 50%, any fund spending less than half of its available balance
+      over time will be flagged.<br><br>
+
+      Lower thresholds are more lenient. Higher thresholds are more aggressive in identifying underutilization.
     </p>
     <br>
 
+    <!-- REVENUE -->
     <label>
       <input type="checkbox" id="includeRevenue">
       Include Revenue in Calculation
     </label><br>
     <p class="helper-text">
-      Adds revenue to available balance.<br>
-      Use if funds receive ongoing inflows.
+      When selected, revenue is added to the available balance when calculating spend rate.<br><br>
+
+      <strong>Use this if:</strong><br>
+      • Funds receive ongoing gifts, transfers, or inflows<br>
+      • You want to evaluate spending relative to total inflows over time<br><br>
+
+      <strong>Do not use this if:</strong><br>
+      • You want to evaluate spending strictly against existing balances<br>
+      • You are analyzing endowment draw vs. spend behavior<br><br>
+
+      This setting can materially change results depending on fund structure.
     </p>
     <br>
 
+    <!-- ACTION -->
     <button id="analyzeBtn" onclick="upload()">Analyze</button>
 
   </section>
@@ -126,7 +151,17 @@
     <h2>Results</h2>
 
     <p class="helper-text">
-      Funds below your threshold may require review.
+      Results display funds that fall below your selected threshold.<br><br>
+
+      These funds may indicate underutilization, meaning balances are accumulating faster than they are being used.<br><br>
+
+      This does <strong>not</strong> automatically mean a fund is being misused — it is a signal for further review.<br><br>
+
+      Interpretation should consider:
+      • Donor intent and restrictions<br>
+      • Planned future use<br>
+      • Fund maturity and lifecycle stage<br>
+      • Institutional policy or spending norms
     </p>
 
     <div id="output">No results yet.</div><br>
@@ -134,7 +169,8 @@
     <button onclick="copyResults()">Copy Results</button>
 
     <p class="helper-text">
-      Spend Rate = Average Spend ÷ Available Balance
+      Spend Rate = Average Spend ÷ Available Balance.<br>
+      Lower values may indicate funds that are not being actively utilized.
     </p>
   </section>
 
@@ -143,20 +179,36 @@
     <h2>Frequently Asked Questions</h2>
 
     <p><strong>Where do I get this data?</strong><br>
-    Export from your CRM, ERP, or financial system.</p>
+    Export fund-level financial data from your CRM, ERP, or financial system.</p>
 
     <p><strong>What is Spend Rate?</strong><br>
     Average Spend divided by Available Balance.</p>
 
     <p><strong>What does underspent mean?</strong><br>
-    Low spend rate relative to balance.</p>
+    It indicates that a fund may not be deploying available resources at a rate consistent with expectations.</p>
+
+    <p><strong>What if my file doesn’t work?</strong><br>
+    Ensure you are using the provided template exactly as structured with correct sheet names and columns.</p>
 
   </section>
 
   <!-- DATA PRIVACY -->
   <section>
     <h2>Data Privacy</h2>
-    <p>Your data is not stored or shared. Files are processed in memory only.</p>
+
+    <p>
+      Your data is not stored, logged, or shared under any circumstances.
+    </p>
+
+    <p>
+      All uploaded files are processed temporarily in memory during your session and are immediately discarded after analysis completes.
+      No data is written to disk, persisted, or accessible to the developer or any third parties.
+    </p>
+
+    <p>
+      This tool is designed to operate as a stateless processor — your data exists only for the duration of the calculation.
+    </p>
+
   </section>
 
   <!-- CONTACT -->
@@ -164,7 +216,7 @@
     <h2>Contact</h2>
 
     <p>
-      Built by a higher education professional focused on fund stewardship.
+      Built by a higher education professional focused on fund stewardship and operational efficiency.
     </p>
 
     <p>
@@ -188,12 +240,12 @@
       const content = document.getElementById("learnMoreContent");
       const arrow = document.getElementById("learnMoreArrow");
 
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-        arrow.innerText = "▼";
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+      content.classList.toggle("open");
+
+      if (content.classList.contains("open")) {
         arrow.innerText = "▲";
+      } else {
+        arrow.innerText = "▼";
       }
     }
   </script>
