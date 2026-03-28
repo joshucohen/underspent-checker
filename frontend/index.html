@@ -98,7 +98,6 @@
   <section>
     <h2>Step 2: Upload & Analyze</h2>
 
-    <!-- FILE -->
     <label>Upload Excel File (.xlsx only):</label><br>
     <input type="file" id="fileInput" accept=".xlsx"><br>
 
@@ -112,7 +111,6 @@
 
     <br>
 
-    <!-- THRESHOLD -->
     <label>Threshold (%):</label><br>
     <input type="number" id="threshold" value="50" min="0" max="100"><br>
 
@@ -125,7 +123,6 @@
 
     <br>
 
-    <!-- REVENUE -->
     <label>
       <input type="checkbox" id="includeRevenue">
       Include Revenue in Calculation
@@ -144,10 +141,8 @@
 
     <br>
 
-    <!-- ACTION -->
     <button id="analyzeBtn" onclick="startAnalysis()">Analyze Funds</button>
 
-    <!-- LOADING BAR -->
     <div id="loadingBar" style="display:none; margin-top:15px;">
       <div style="width:100%; background:#eee; border-radius:6px;">
         <div id="progress" style="width:0%; height:8px; background:#2563eb; border-radius:6px;"></div>
@@ -176,19 +171,23 @@
 
     <p class="helper-text">
       Results highlight funds where spending is not keeping pace with available balances.<br><br>
-
-      <strong>These are your highest-priority funds for review.</strong><br><br>
-
-      This does not automatically indicate misuse — it signals where further review is needed.
+      <strong>These are your highest-priority funds for review.</strong>
     </p>
 
     <p class="helper-text">
-      Next step: Review these funds with stakeholders to determine whether spending should be increased, reallocated, or intentionally preserved.
+      Preview shows the top 5 lowest spend rates. Export to access full results.
     </p>
 
     <div id="output">No results yet.</div><br>
 
-    <button id="copyBtn" onclick="copyResults()" style="display:none;">Copy Results</button>
+    <!-- ✅ UPDATED BUTTONS -->
+    <button id="copyBtn" onclick="copyResults()" style="display:none;">
+      Copy Full Results
+    </button>
+
+    <button id="downloadBtn" onclick="downloadCSV()" style="display:none; margin-left:10px;">
+      Download CSV
+    </button>
 
     <p class="helper-text">
       Spend Rate = Average Spend ÷ Available Balance.
@@ -270,22 +269,10 @@
 
       let percent = 0;
 
-      const messages = [
-        "Reading Excel file...",
-        "Structuring fund data...",
-        "Calculating spend behavior...",
-        "Flagging potential underutilization..."
-      ];
-
-      let msgIndex = 0;
-
       const interval = setInterval(() => {
         percent += Math.random() * 12;
         if (percent > 90) percent = 90;
-
         progress.style.width = percent + "%";
-        text.innerText = messages[msgIndex % messages.length];
-        msgIndex++;
       }, 600);
 
       upload()
